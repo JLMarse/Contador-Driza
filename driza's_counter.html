@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
+</head>
+
+<body>
+
+    <nav id="navbar">
+        <a href="https://www.driza.co/">
+            <img src="./img/logo.png" alt="Logo Driza">
+        </a>
+    </nav>
+
+    <section id="sect">
+
+        <div>
+            <h1>Contador Clicks & Tiempo</h1>
+        </div>
+        <div>
+            <button id="btnClick">Click!!!</button>
+            <button id="btnClear">Reset</button>
+        </div>
+
+        <div id="contentContainer">
+            <ul id="resultsList"></ul>
+            <div id="memeContainer"></div>
+        </div>
+
+    </section>
+
+    <!-- Parte Lógica -->
+
+    <script type="text/javascript">
+
+        let btnElm = document.getElementById('btnClick');
+        let btnClear = document.getElementById('btnClear');
+        let resultsList = document.getElementById('resultsList');
+        let contentContainer = document.getElementById('contentContainer');
+
+        let counter = 0;
+        let clickInterval = 10;
+        let clickCountForAnimation = clickInterval; // Contador para mostrar la animación cada clickInterval clics
+        let intervals = [];
+        let lastClickTime = 0;
+        let memeUrl = './img/meme.jpeg';
+
+        //Lógicas de GSAP
+        let timeline = gsap.timeline({ repeat: -1, yoyo: true });
+        timeline.to("#sect", { duration: 1, opacity: 0.4, delay: 1 });
+
+
+        btnElm.onclick = function () {
+            let currentTime = Date.now();
+            let interval = lastClickTime === 0 ? 0 : currentTime - lastClickTime;
+
+            lastClickTime = currentTime;
+
+            let clickCount = intervals.length + 1;
+
+            intervals.push(interval);
+
+            let results = []; // Array temporal para almacenar los resultados en orden ascendente
+
+            for (let i = 0; i < intervals.length; i++) {
+                let count = clickCount - intervals.length + i; // Calculo el número de clics actual
+                results.push({
+                    count: count,
+                    interval: intervals[i]
+                });
+            }
+
+            //ordeno de menor a mayor por intervalos
+            results.sort((a, b) => a.interval - b.interval);
+
+            // Limpiar la lista antes de agregar los resultados ordenados
+            resultsList.innerHTML = "";
+
+            results.forEach((result) => {
+                let resultItem = document.createElement('li');
+                resultItem.textContent = "Click número ---> " + result.count + " | Intervalo: " + result.interval + " ms";
+                resultsList.appendChild(resultItem);
+
+                if (result.count === clickCountForAnimation) {
+
+                    // Cuando se alcance el click en el intervalo, ocultar la lista de resultados y muestar el meme
+                    gsap.to(resultsList, { duration: 1, opacity: 0, display: "none", onComplete: showAnimation });
+                    clickCountForAnimation += clickInterval;
+                }
+            });
+        }
+
+        function showAnimation() {
+
+            let memeImg = document.createElement('img');
+            memeImg.src = memeUrl;
+
+            // Agrego la imagen al memeContainer
+            let memeContainer = document.getElementById('memeContainer');
+            memeContainer.appendChild(memeImg);
+
+            memeContainer.style.display = "flex";
+
+            gsap.from(memeImg, { duration: 1, opacity: 1, scale: 0.5 });
+
+            // Lógica para hacer desaparece el meme tras tres segundos, su container y que aparezca de nuevo la lista
+            gsap.to(memeImg, {
+                duration: 1, opacity: 0, delay: 3, onComplete: () => {
+                    memeContainer.removeChild(memeImg);
+                    memeContainer.style.display = "none";
+                    gsap.to(resultsList, { duration: 1, opacity: 1, display: "block" });
+                }
+            });
+        }
+
+        btnClear.onclick = function () {
+            resultsList.innerHTML = "";
+            intervals = [];
+            lastClickTime = 0;
+            clickCountForAnimation = clickInterval;
+        }
+
+    </script>
+</body>
+
+</html>

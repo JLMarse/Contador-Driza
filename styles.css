@@ -1,0 +1,75 @@
+ body {
+     margin: 0;
+     display: flex;
+     flex-direction: column;
+     justify-content: flex-start;
+     align-items: center;
+     min-height: 100vh;
+     font-family: Arial, sans-serif;
+     background-color: #737373;
+ }
+
+ #navbar {
+     width: 100%;
+     background-color: #dae0e6;
+     padding: 10px 0;
+     display: flex;
+     justify-content: space-between;
+     /* Cambio para alinear el logo a la izquierda */
+     align-items: center;
+     /* Centrar verticalmente el contenido de la barra de navegación */
+ }
+
+ #navbar img {
+     height: 40px;
+     margin-left: 40px;
+ }
+
+ #sect {
+     margin-top: 20px;
+     padding: 20px;
+     border-radius: 10px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     width: 400px;
+     background-color: rgba(255, 255, 255, 0.8);
+
+ }
+
+ #sect h1 {
+     text-align: center;
+     margin-bottom: 20px;
+ }
+
+ #sect div {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 20px;
+ }
+
+
+ #sect button {
+     margin: 0 5px;
+     padding: 8px 20px;
+     border: none;
+     border-radius: 5px;
+     background-color: #007bff;
+     color: #fff;
+     cursor: pointer;
+ }
+
+ #sect button:hover {
+     background-color: #0056b3;
+ }
+
+ #resultsList {
+     padding: 0;
+     list-style: none;
+ }
+
+ #resultsList li {
+     margin: 5px 0;
+     padding: 8px;
+     background-color: #f0f0f0;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
